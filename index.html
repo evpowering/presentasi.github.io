@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar RapidMiner - Panduan Super Mudah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.8;
+            font-size: 18px;
+        }
+
+        header {
+            background: #4CAF50;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 5px 10px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .page-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            display: flex;
+            gap: 10px;
+        }
+
+        .page-switcher a {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .page-switcher a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-switcher a.active {
+            background: #333;
+            cursor: default;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #4CAF50;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 1.2rem;
+            margin: 25px 0 15px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 15px 20px;
+            border-left: 5px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            padding: 15px 20px;
+            border-left: 5px solid #2196F3;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: #e8f5e9;
+            padding: 15px 20px;
+            border-left: 5px solid #4CAF50;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        img {
+            max-width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        img:hover {
+            border-color: #4CAF50;
+        }
+
+        .caption {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .simple-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .simple-table th,
+        .simple-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .simple-table th {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .simple-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .step-box {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .analogy {
+            background: #fff8e1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px dashed #ffb300;
+        }
+
+        .analogy::before {
+            content: "💡 ";
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        /* Lightbox sederhana */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            cursor: pointer;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-switcher">
+        <a href="index.html" class="active">📚 Panduan</a>
+        <a href="tutorial-praktik.html">🎯 Tutorial</a>
+        <a href="tanya-jawab.html">❓ Tanya Jawab</a>
+    </div>
+
+    <header>
+        <h1>🎓 Belajar RapidMiner</h1>
+        <p>Panduan Super Mudah untuk yang Baru Pertama Kali</p>
+    </header>
+
+    <nav>
+        <a href="#apa-ini">Apa Ini?</a>
+        <a href="#tampilan">Tampilan</a>
+        <a href="#langkah">Langkah-Langkah</a>
+        <a href="#screenshot">Gambar</a>
+        <a href="#hasil">Hasil</a>
+    </nav>
+
+    <main>
+
+        <!-- BAGIAN 1 -->
+        <section id="apa-ini">
+            <h2>🤔 RapidMiner Itu Apa Sih?</h2>
+
+            <div class="analogy">
+                <strong>Bayangkan begini:</strong> Kamu punya toko online dan sudah jualan 1000 kali. Kamu punya catatan
+                semua penjualan itu. Nah, RapidMiner itu seperti <strong>asisten pintar</strong> yang bisa membaca semua
+                catatan itu dan bilang ke kamu: "Eh, kalau harganya segini dan diskonnya segitu, biasanya penjualannya
+                bagus lho!"
+            </div>
+
+            <p><strong>Jadi RapidMiner itu:</strong></p>
+            <ul>
+                <li>Aplikasi komputer untuk menganalisis data (catatan-catatan)</li>
+                <li>Bisa menemukan pola yang tidak kita sadari</li>
+                <li>Bisa memprediksi apa yang mungkin terjadi</li>
+                <li>Tidak perlu nulis kode program - tinggal drag and drop (seret dan lepas)</li>
+            </ul>
+
+            <div class="info">
+                <strong>Istilah yang perlu kamu tahu:</strong><br>
+                <strong>Data Mining</strong> = Menggali/mencari informasi berharga dari banyak data. Seperti menambang
+                emas dari banyak tanah.
+            </div>
+        </section>
+
+        <!-- BAGIAN 2 -->
+        <section id="tampilan">
+            <h2>🖥️ Tampilan RapidMiner</h2>
+
+            <p>Waktu buka RapidMiner, kamu akan lihat layar yang dibagi jadi beberapa bagian:</p>
+
+            <div class="step-box">
+                <p><strong>KIRI ATAS - Repository:</strong> Tempat menyimpan file-file kamu</p>
+                <p><strong>KIRI BAWAH - Operators:</strong> Daftar alat-alat yang bisa kamu pakai (seperti toolbox)</p>
+                <p><strong>TENGAH - Canvas:</strong> Area kerja utama, tempat kamu menyusun alat-alat</p>
+                <p><strong>KANAN - Parameters:</strong> Pengaturan untuk alat yang kamu pilih</p>
+            </div>
+
+            <div class="analogy">
+                Bayangkan RapidMiner seperti <strong>dapur</strong>. Di kiri ada rak bumbu dan peralatan (Operators). Di
+                tengah ada meja masak (Canvas) tempat kamu meracik. Di kanan ada resep dan pengaturan (Parameters).
+            </div>
+        </section>
+
+        <!-- BAGIAN 3 -->
+        <section id="langkah">
+            <h2>📝 Apa Yang Dilakukan Project Teman Kamu?</h2>
+
+            <p>Project teman kamu ingin <strong>memprediksi</strong> kapan penjualan toko online itu BAGUS atau JELEK.
+                Caranya:</p>
+
+            <div class="step-box">
+                <p><span class="step-number">1</span> <strong>Ambil Data</strong><br>
+                    Membaca file Excel/CSV yang berisi catatan 1000 penjualan. Isinya: tanggal, kategori produk, harga,
+                    diskon, tipe pelanggan, biaya iklan, dan berapa unit terjual.</p>
+            </div>
+
+            <div class="step-box">
+                <p><span class="step-number">2</span> <strong>Pilih Data</strong><br>
+                    Memilih kolom mana saja yang mau dipakai. Tidak semua data penting untuk analisis.</p>
+            </div>
+
+            <div class="step-box">
+                <p><span class="step-number">3</span> <strong>Buat Label/Kategori</strong><br>
+                    Mengelompokkan penjualan menjadi:<br>
+                    • <strong>LOW</strong> = Penjualan rendah (terjual 20 unit atau kurang)<br>
+                    • <strong>MEDIUM</strong> = Penjualan sedang (terjual 21-51 unit)<br>
+                    • <strong>HIGH</strong> = Penjualan tinggi (terjual lebih dari 51 unit)</p>
+            </div>
+
+            <div class="step-box">
+                <p><span class="step-number">4</span> <strong>Filter Data</strong><br>
+                    Dalam project ini, data HIGH dibuang, jadi hanya fokus ke LOW dan MEDIUM saja.</p>
+            </div>
+
+            <div class="step-box">
+                <p><span class="step-number">5</span> <strong>Tentukan Target</strong><br>
+                    Memberitahu komputer: "Yang mau kita tebak adalah kolom status_penjualan (LOW atau MEDIUM)"</p>
+            </div>
+
+            <div class="step-box">
+                <p><span class="step-number">6</span> <strong>Gandakan Data</strong><br>
+                    Data di-copy supaya bisa diproses oleh 2 metode berbeda sekaligus.</p>
+            </div>
+
+            <div class="step-box">
+                <p><span class="step-number">7</span> <strong>Uji dengan 2 Metode</strong><br>
+                    Komputer belajar dari data pakai 2 cara berbeda (C4.5 dan CART). Ini seperti minta 2 guru berbeda
+                    mengajarkan hal yang sama, terus lihat mana yang lebih bagus.</p>
+            </div>
+
+            <div class="step-box">
+                <p><span class="step-number">8</span> <strong>Lihat Hasil</strong><br>
+                    Cek seberapa akurat prediksinya. Di project ini hasilnya 100% akurat!</p>
+            </div>
+        </section>
+
+        <!-- BAGIAN 4: SCREENSHOT -->
+        <section id="screenshot">
+            <h2>📸 Penjelasan Setiap Gambar</h2>
+
+            <p><em>Klik gambar untuk memperbesar!</em></p>
+
+            <!-- SS 620 -->
+            <h3>Gambar 1: Membaca Data (Read CSV)</h3>
+            <img src="screenshot/Screenshot (620).png" onclick="openLightbox(this)" alt="Read CSV">
+            <p class="caption">Ini adalah langkah pertama: membaca file data</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                • Kotak kuning "Read CSV" sedang dipilih<br>
+                • Di sebelah kanan ada pengaturan untuk membaca file<br>
+                • "csv_file" menunjukkan lokasi file data yang dibaca<br><br>
+                <strong>Bahasa simpelnya:</strong> Komputer sedang membuka file catatan penjualan.
+            </div>
+
+            <!-- SS 621 -->
+            <h3>Gambar 2: Memilih Kolom (Select Attributes)</h3>
+            <img src="screenshot/Screenshot (621).png" onclick="openLightbox(this)" alt="Select Attributes">
+            <p class="caption">Memilih kolom mana yang mau dipakai</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                • Kotak "Select Attributes" sedang dipilih<br>
+                • Di kanan ada pilihan "attributes" untuk memilih kolom<br><br>
+                <strong>Bahasa simpelnya:</strong> Dari semua kolom di file, kita pilih mana yang penting. Misalnya kita
+                butuh harga dan diskon, tapi tidak butuh nomor telepon pelanggan.
+            </div>
+
+            <!-- SS 622 -->
+            <h3>Gambar 3: Membuat Kategori Baru (Generate Attributes)</h3>
+            <img src="screenshot/Screenshot (622).png" onclick="openLightbox(this)" alt="Generate Attributes">
+            <p class="caption">Membuat kolom baru bernama "status_penjualan"</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                • Kotak "Generate Attributes" dipilih<br>
+                • Di sini kita bikin aturan:<br>
+                &nbsp;&nbsp;- Kalau terjual 20 atau kurang → tulis "Low"<br>
+                &nbsp;&nbsp;- Kalau terjual 21-51 → tulis "Medium"<br>
+                &nbsp;&nbsp;- Kalau terjual lebih dari 51 → tulis "High"<br><br>
+                <strong>Bahasa simpelnya:</strong> Kita bikin sistem penilaian. Seperti guru yang kasih nilai A, B, C
+                berdasarkan skor ujian.
+            </div>
+
+            <!-- SS 623 -->
+            <h3>Gambar 4: Menyaring Data (Filter Examples)</h3>
+            <img src="screenshot/Screenshot (623).png" onclick="openLightbox(this)" alt="Filter Examples">
+            <p class="caption">Menyaring data tertentu</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                • Kotak "Filter Examples" dipilih<br>
+                • Ada aturan filter di sebelah kanan<br><br>
+                <strong>Bahasa simpelnya:</strong> Kita buang data yang penjualannya tinggi (High), jadi hanya fokus ke
+                Low dan Medium saja. Seperti menyortir buah, yang busuk dibuang.
+            </div>
+
+            <!-- SS 624 -->
+            <h3>Gambar 5: Menentukan Target (Set Role)</h3>
+            <img src="screenshot/Screenshot (624).png" onclick="openLightbox(this)" alt="Set Role">
+            <p class="caption">Memberitahu komputer apa yang mau ditebak</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                • Kotak "Set Role" dipilih<br>
+                • Di kanan ada "attribute_name: status_penjualan" dan "target_role: label"<br><br>
+                <strong>Bahasa simpelnya:</strong> Kita bilang ke komputer: "Tolong tebak kolom status_penjualan ya.
+                Kolom lainnya itu petunjuk untuk menebak."
+            </div>
+
+            <!-- SS 625 -->
+            <h3>Gambar 6: Menggandakan Data (Multiply)</h3>
+            <img src="screenshot/Screenshot (625).png" onclick="openLightbox(this)" alt="Multiply">
+            <p class="caption">Meng-copy data</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                • Kotak "Multiply" dipilih<br>
+                • Ada 2 garis keluar dari kotak ini<br><br>
+                <strong>Bahasa simpelnya:</strong> Data di-fotocopy jadi 2, supaya bisa diproses oleh 2 metode berbeda
+                secara bersamaan.
+            </div>
+
+            <!-- SS 626-627 -->
+            <h3>Gambar 7 & 8: Pengujian (Validation)</h3>
+            <img src="screenshot/Screenshot (626).png" onclick="openLightbox(this)" alt="Validation">
+            <p class="caption">Kotak hijau besar ini adalah tempat pengujian</p>
+
+            <img src="screenshot/Screenshot (627).png" onclick="openLightbox(this)" alt="Validation 2">
+            <p class="caption">Ada 2 kotak pengujian untuk 2 metode berbeda</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                • Kotak hijau besar "Validation" dipilih<br>
+                • Di kanan ada "number_of_validations: 10"<br><br>
+                <strong>Bahasa simpelnya:</strong> Komputer belajar dan diuji 10 kali. Seperti latihan soal 10 kali
+                sebelum ujian beneran, terus dihitung rata-rata nilainya.
+            </div>
+
+            <!-- SS 628 -->
+            <h3>Gambar 9: Tampilan Keseluruhan</h3>
+            <img src="screenshot/Screenshot (628).png" onclick="openLightbox(this)" alt="Full Process">
+            <p class="caption">Ini semua langkah dari awal sampai akhir</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                Ini tampilan keseluruhan proses. Kamu bisa lihat:<br>
+                • Dimulai dari Read CSV di kiri atas<br>
+                • Alurnya ke kanan dan ke bawah<br>
+                • Ada 2 kotak hijau besar (2 metode pengujian)<br>
+                • Garis-garis menghubungkan setiap langkah<br><br>
+                <strong>Bahasa simpelnya:</strong> Ini seperti peta jalan dari awal sampai akhir. Data mengalir dari
+                kiri ke kanan.
+            </div>
+
+            <!-- SS 629-631 -->
+            <h3>Gambar 10-12: Hasil Pohon Keputusan</h3>
+            <img src="screenshot/Screenshot (629).png" onclick="openLightbox(this)" alt="Tree Result">
+            <p class="caption">Ini hasil belajar komputer - bentuknya seperti pohon</p>
+
+            <img src="screenshot/Screenshot (631).png" onclick="openLightbox(this)" alt="Tree C4.5">
+            <p class="caption">Pohon keputusan dengan bentuk yang lebih jelas</p>
+
+            <div class="highlight">
+                <strong>Apa yang terjadi di gambar ini?</strong><br>
+                Komputer sudah belajar dan hasilnya berupa "pohon keputusan":<br>
+                • Akar pohon: Units_Sold (jumlah terjual)<br>
+                • Kalau terjual ≤ 20.5 → hasilnya LOW<br>
+                • Kalau terjual > 20.5 → hasilnya MEDIUM<br><br>
+                <strong>Bahasa simpelnya:</strong> Komputer menemukan aturan sederhana: "Kalau terjualnya 20 atau
+                kurang, itu penjualan rendah. Kalau lebih dari 20, itu penjualan sedang."
+            </div>
+
+            <!-- SS 632 -->
+            <h3>Gambar 13: Tingkat Keberhasilan</h3>
+            <img src="screenshot/Screenshot (632).png" onclick="openLightbox(this)" alt="Performance">
+            <p class="caption">Ini menunjukkan seberapa akurat prediksinya</p>
+
+            <div class="success">
+                <strong>Hasil: AKURASI 100%!</strong><br><br>
+                Artinya dari semua data yang diuji, komputer berhasil menebak semuanya dengan BENAR.<br><br>
+                Tabel di gambar menunjukkan:<br>
+                • 889 data Medium → ditebak Medium (BENAR ✓)<br>
+                • 109 data Low → ditebak Low (BENAR ✓)<br>
+                • Tidak ada yang salah tebak!
+            </div>
+
+            <!-- SS 633-639 -->
+            <h3>Gambar 14-20: Berbagai Tampilan Pohon</h3>
+            <p>Gambar-gambar ini hanya menunjukkan cara lain untuk melihat pohon keputusan. Isinya sama, hanya
+                tampilannya berbeda:</p>
+
+            <img src="screenshot/Screenshot (633).png" onclick="openLightbox(this)" alt="Radial">
+            <p class="caption">Tampilan Radial (melingkar)</p>
+
+            <img src="screenshot/Screenshot (634).png" onclick="openLightbox(this)" alt="Balloon">
+            <p class="caption">Tampilan Balloon (balon)</p>
+
+            <img src="screenshot/Screenshot (635).png" onclick="openLightbox(this)" alt="ISOM">
+            <p class="caption">Tampilan ISOM</p>
+
+            <img src="screenshot/Screenshot (636).png" onclick="openLightbox(this)" alt="KKLayout">
+            <p class="caption">Tampilan KKLayout</p>
+
+            <img src="screenshot/Screenshot (637).png" onclick="openLightbox(this)" alt="FRLayout">
+            <p class="caption">Tampilan FRLayout</p>
+
+            <img src="screenshot/Screenshot (638).png" onclick="openLightbox(this)" alt="Circle">
+            <p class="caption">Tampilan Circle (lingkaran)</p>
+
+            <img src="screenshot/Screenshot (639).png" onclick="openLightbox(this)" alt="String">
+            <p class="caption">Tampilan String</p>
+
+            <div class="info">
+                <strong>Semua tampilan ini sama isinya!</strong><br>
+                RapidMiner punya banyak cara untuk menampilkan hasil yang sama. Ini hanya masalah selera visual saja.
+                Yang paling mudah dibaca biasanya tampilan Tree biasa.
+            </div>
+        </section>
+
+        <!-- BAGIAN 5: HASIL -->
+        <section id="hasil">
+            <h2>🎯 Kesimpulan Project Teman Kamu</h2>
+
+            <div class="success">
+                <h3>Apa yang berhasil dilakukan:</h3>
+                <ol>
+                    <li>Membaca data penjualan toko online (1000 transaksi)</li>
+                    <li>Mengelompokkan penjualan menjadi LOW dan MEDIUM</li>
+                    <li>Mengajarkan komputer untuk menebak kategori penjualan</li>
+                    <li>Komputer berhasil menebak dengan akurasi 100%!</li>
+                </ol>
+            </div>
+
+            <div class="highlight">
+                <h3>Aturan yang ditemukan komputer:</h3>
+                <p style="font-size: 1.2em; text-align: center;">
+                    Kalau <strong>unit terjual ≤ 20</strong> → Penjualan <strong>LOW</strong><br>
+                    Kalau <strong>unit terjual > 20</strong> → Penjualan <strong>MEDIUM</strong>
+                </p>
+            </div>
+
+            <h3>Tentang 2 Metode yang Dipakai:</h3>
+
+            <table class="simple-table">
+                <tr>
+                    <th>Metode</th>
+                    <th>Penjelasan Simpel</th>
+                </tr>
+                <tr>
+                    <td><strong>C4.5</strong></td>
+                    <td>Cara pertama untuk membuat pohon keputusan. Pakai perhitungan yang disebut "Gain Ratio".</td>
+                </tr>
+                <tr>
+                    <td><strong>CART</strong></td>
+                    <td>Cara kedua untuk membuat pohon keputusan. Pakai perhitungan yang disebut "Gini Index".</td>
+                </tr>
+            </table>
+
+            <div class="info">
+                <strong>Tidak perlu menghafal rumusnya!</strong><br>
+                Yang penting kamu tahu bahwa ada 2 cara berbeda, dan keduanya menghasilkan akurasi yang sama (100%) di
+                project ini.
+            </div>
+        </section>
+
+        <!-- DAFTAR ISTILAH -->
+        <section>
+            <h2>📚 Daftar Istilah (Bahasa Simpel)</h2>
+
+            <table class="simple-table">
+                <tr>
+                    <th>Istilah</th>
+                    <th>Artinya</th>
+                </tr>
+                <tr>
+                    <td>Operator</td>
+                    <td>Kotak-kotak alat di RapidMiner (seperti Read CSV, Filter, dll)</td>
+                </tr>
+                <tr>
+                    <td>Attribute / Atribut</td>
+                    <td>Kolom di tabel data (contoh: Harga, Diskon, Tanggal)</td>
+                </tr>
+                <tr>
+                    <td>Label</td>
+                    <td>Kolom yang mau ditebak/diprediksi</td>
+                </tr>
+                <tr>
+                    <td>Example</td>
+                    <td>Satu baris data (1 transaksi penjualan)</td>
+                </tr>
+                <tr>
+                    <td>Decision Tree</td>
+                    <td>Pohon keputusan - hasil belajar komputer berbentuk aturan bercabang</td>
+                </tr>
+                <tr>
+                    <td>Accuracy</td>
+                    <td>Persentase tebakan yang benar (100% = semua benar)</td>
+                </tr>
+                <tr>
+                    <td>Validation</td>
+                    <td>Proses menguji apakah komputer sudah belajar dengan benar</td>
+                </tr>
+                <tr>
+                    <td>CSV</td>
+                    <td>Format file data (seperti Excel tapi lebih sederhana)</td>
+                </tr>
+            </table>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>🎓 Panduan RapidMiner untuk Pemula</p>
+        <p>Dibuat dengan bahasa yang mudah dimengerti</p>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="close-btn">&times;</span>
+        <img id="lightbox-img" src="">
+    </div>
+
+    <script>
+        function openLightbox(img) {
+            document.getElementById('lightbox').classList.add('active');
+            document.getElementById('lightbox-img').src = img.src;
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+
+</body>
+
+</html>

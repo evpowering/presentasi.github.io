@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial Praktik RapidMiner - Step by Step</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #f0f4f8;
+            color: #333;
+            line-height: 1.8;
+            font-size: 18px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 5px 15px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .page-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            display: flex;
+            gap: 10px;
+        }
+
+        .page-switcher a {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .page-switcher a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-switcher a.active {
+            background: #333;
+            cursor: default;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin: 25px 0 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Step Box */
+        .step {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .step-content {
+            margin-left: 65px;
+        }
+
+        /* Boxes */
+        .do-box {
+            background: #e8f5e9;
+            border-left: 5px solid #4CAF50;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .do-box::before {
+            content: "✅ LAKUKAN: ";
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .why-box {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .why-box::before {
+            content: "🤔 KENAPA? ";
+            font-weight: 700;
+            color: #e65100;
+        }
+
+        .tip-box {
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .tip-box::before {
+            content: "💡 TIPS: ";
+            font-weight: 700;
+            color: #1565c0;
+        }
+
+        .warning-box {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box::before {
+            content: "⚠️ PERHATIAN: ";
+            font-weight: 700;
+            color: #c62828;
+        }
+
+        .concept-box {
+            background: #f3e5f5;
+            border-left: 5px solid #9c27b0;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .concept-box::before {
+            content: "📚 KONSEP: ";
+            font-weight: 700;
+            color: #6a1b9a;
+        }
+
+        .error-box {
+            background: #fce4ec;
+            border: 2px dashed #e91e63;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .error-box::before {
+            content: "🔧 JIKA ERROR: ";
+            font-weight: 700;
+            color: #c2185b;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .error-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #e91e63;
+        }
+
+        .error-item strong {
+            color: #c2185b;
+        }
+
+        .fix-text {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        /* Image */
+        img {
+            max-width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        img:hover {
+            transform: scale(1.01);
+            border-color: #667eea;
+        }
+
+        .caption {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-top: -5px;
+            margin-bottom: 15px;
+        }
+
+        /* Lists */
+        ol,
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* Code */
+        code {
+            background: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #d63384;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9ff;
+        }
+
+        /* Checklist */
+        .checklist {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .checklist h4 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .checklist label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 3px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 0.5s;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            cursor: pointer;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .step-content {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-switcher">
+        <a href="index.html">📚 Panduan</a>
+        <a href="tutorial-praktik.html" class="active">🎯 Tutorial</a>
+        <a href="tanya-jawab.html">❓ Tanya Jawab</a>
+    </div>
+
+    <header>
+        <h1>🎯 Tutorial Praktik RapidMiner</h1>
+        <p>Panduan Langkah demi Langkah untuk Membuat Project Data Mining</p>
+    </header>
+
+    <nav>
+        <a href="#persiapan">Persiapan</a>
+        <a href="#langkah1">Langkah 1-4</a>
+        <a href="#langkah5">Langkah 5-8</a>
+        <a href="#langkah9">Langkah 9-12</a>
+        <a href="#hasil">Hasil</a>
+    </nav>
+
+    <main>
+
+        <!-- INTRO -->
+        <section>
+            <h2>📋 Apa yang Akan Kamu Buat?</h2>
+
+            <p>Dalam tutorial ini, kamu akan membuat <strong>project klasifikasi data penjualan</strong> menggunakan
+                algoritma Decision Tree (C4.5 dan CART).</p>
+
+            <div class="concept-box">
+                <strong>Klasifikasi</strong> adalah proses mengelompokkan data ke dalam kategori. Contoh: Email → Spam
+                atau Bukan Spam. Dalam project ini: Penjualan → Low, Medium, atau High.
+            </div>
+
+            <h3>🎯 Tujuan Project:</h3>
+            <ul>
+                <li>Membaca data penjualan e-commerce (1000 transaksi)</li>
+                <li>Membuat kategori penjualan (Low/Medium/High)</li>
+                <li>Melatih komputer untuk memprediksi kategori penjualan</li>
+                <li>Membandingkan 2 metode pembelajaran (C4.5 vs CART)</li>
+            </ul>
+
+            <div class="progress-container">
+                <div class="progress-bar" style="width: 0%;">Mulai Tutorial →</div>
+            </div>
+        </section>
+
+        <!-- PERSIAPAN -->
+        <section id="persiapan">
+            <h2>🔧 Persiapan Sebelum Mulai</h2>
+
+            <div class="checklist">
+                <h4>Pastikan kamu sudah punya:</h4>
+                <label><input type="checkbox"> RapidMiner Studio terinstall (versi 7.1 atau yang lain)</label>
+                <label><input type="checkbox"> File data: <code>Ecommerce_Sales_Prediction_Dataset.csv</code></label>
+                <label><input type="checkbox"> Sudah tahu lokasi file data di komputermu</label>
+            </div>
+
+            <div class="tip-box">
+                Sebelum praktik, catat dulu lokasi file CSV-mu. Misalnya: <code>D:\Data\dataset.csv</code> atau
+                <code>E:\Tugas\data.csv</code>
+            </div>
+        </section>
+
+        <!-- LANGKAH 1 -->
+        <section id="langkah1">
+            <h2>📝 Langkah 1-4: Menyiapkan Data</h2>
+
+            <!-- STEP 1 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Buka RapidMiner dan Buat Project Baru</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Buka aplikasi RapidMiner Studio</li>
+                            <li>Klik <strong>File → New Process</strong></li>
+                            <li>Sekarang kamu akan melihat canvas kosong di tengah layar</li>
+                        </ol>
+                    </div>
+
+                    <div class="why-box">
+                        Process adalah "resep" atau alur kerja yang akan kita buat. Sama seperti membuat resep masakan
+                        baru, kita mulai dari halaman kosong.
+                    </div>
+
+                    <div class="tip-box">
+                        Simpan project-mu sejak awal! Klik <strong>File → Save Process As</strong> dan beri nama yang
+                        jelas, misalnya "Klasifikasi_Penjualan".
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ RapidMiner tidak mau buka / crash:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Pastikan Java sudah terinstall. Download dari
+                            java.com jika belum ada.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Muncul "License expired":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Daftar akun gratis di rapidminer.com dan login.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Tambahkan Operator "Read CSV"</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Di panel <strong>Operators</strong> (kiri bawah), ketik <code>Read CSV</code> di kotak
+                                pencarian</li>
+                            <li>Drag (seret) operator <strong>Read CSV</strong> ke area canvas (tengah)</li>
+                            <li>Klik operator tersebut, lalu di panel <strong>Parameters</strong> (kanan):</li>
+                            <li>Klik tombol folder di sebelah <strong>csv file</strong></li>
+                            <li>Pilih file <code>Ecommerce_Sales_Prediction_Dataset.csv</code></li>
+                            <li>Klik <strong>Import Configuration Wizard</strong> untuk mengatur import</li>
+                            <li>Ikuti wizard sampai selesai (biasanya klik Next terus sampai Finish)</li>
+                        </ol>
+                    </div>
+
+                    <img src="screenshot/Screenshot (620).png" onclick="openLightbox(this)" alt="Read CSV">
+                    <p class="caption">Contoh tampilan Read CSV</p>
+
+                    <div class="why-box">
+                        <strong>Read CSV</strong> adalah pintu masuk data ke RapidMiner. CSV (Comma Separated Values)
+                        adalah format file yang umum untuk menyimpan data tabel. Tanpa langkah ini, RapidMiner tidak
+                        punya data untuk diproses.
+                    </div>
+
+                    <div class="concept-box">
+                        <strong>Data mentah</strong> adalah data yang belum diolah. Dalam file CSV ini, ada 1000+ baris
+                        data transaksi penjualan dengan kolom: Date, Product_Category, Price, Discount,
+                        Customer_Segment, Marketing_Spend, dan Units_Sold.
+                    </div>
+
+                    <div class="warning-box">
+                        Pastikan lokasi file CSV sudah benar! Jika salah, RapidMiner akan error saat dijalankan.
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ "Could not read file" / "File not found":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Path file salah. Klik folder lagi, pilih ulang file
+                            CSV dengan benar.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Data kosong / tidak muncul:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Klik "Import Configuration Wizard", centang "first
+                            row as names", klik Next sampai Finish.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Kolom berantakan:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Di wizard, ubah "column separator" ke semicolon (;)
+                            atau comma (,).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Tambahkan Operator "Select Attributes"</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Cari operator <strong>Select Attributes</strong> di panel Operators</li>
+                            <li>Drag ke canvas, letakkan di sebelah kanan Read CSV</li>
+                            <li>Hubungkan output Read CSV ke input Select Attributes:
+                                <ul>
+                                    <li>Klik titik kecil di sisi kanan Read CSV</li>
+                                    <li>Tarik garis ke titik di sisi kiri Select Attributes</li>
+                                </ul>
+                            </li>
+                            <li>Klik Select Attributes, di Parameters pilih:
+                                <ul>
+                                    <li><strong>attribute filter type</strong>: subset</li>
+                                    <li>Klik <strong>Select Attributes</strong> dan centang semua kolom yang mau dipakai
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <img src="screenshot/Screenshot (621).png" onclick="openLightbox(this)" alt="Select Attributes">
+                    <p class="caption">Contoh tampilan Select Attributes</p>
+
+                    <div class="why-box">
+                        Tidak semua kolom data selalu berguna. Operator ini membantumu memilih kolom yang relevan saja.
+                        Misalnya, kalau ada kolom "ID Transaksi", itu tidak berguna untuk prediksi dan bisa dibuang.
+                    </div>
+
+                    <div class="tip-box">
+                        Dalam project ini, kita pakai semua kolom. Tapi di project nyata, kamu mungkin perlu membuang
+                        kolom yang tidak relevan untuk hasil yang lebih baik.
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ "No attributes selected":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Kamu belum memilih kolom. Klik "Select Attributes"
+                            dan centang kolom yang dibutuhkan.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Garis tidak bisa ditarik:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Klik tepat di titik kecil (port) di sisi operator.
+                            Coba zoom in jika susah.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Tambahkan Operator "Generate Attributes"</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Cari dan drag operator <strong>Generate Attributes</strong></li>
+                            <li>Hubungkan dari Select Attributes</li>
+                            <li>Klik operator ini, lalu di Parameters:</li>
+                            <li>Klik <strong>Edit List</strong> di sebelah "function descriptions"</li>
+                            <li>Isi seperti ini:
+                                <ul>
+                                    <li><strong>Attribute name</strong>: <code>status_penjualan</code></li>
+                                    <li><strong>Function expressions</strong>: <br>
+                                        <code>if(Units_Sold &lt;= 20, "Low", if(Units_Sold &lt;= 51, "Medium", "High"))</code>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>Klik OK</li>
+                        </ol>
+                    </div>
+
+                    <img src="screenshot/Screenshot (622).png" onclick="openLightbox(this)" alt="Generate Attributes">
+                    <p class="caption">Contoh tampilan Generate Attributes</p>
+
+                    <div class="why-box">
+                        Kita sedang membuat <strong>label/kategori</strong> untuk data. Data asli hanya punya angka
+                        (Units_Sold = 32), tapi komputer butuh kategori (Low/Medium/High) untuk belajar klasifikasi. Ini
+                        seperti guru yang memberi nilai huruf berdasarkan skor angka.
+                    </div>
+
+                    <div class="concept-box">
+                        <strong>Labeling/Pelabelan</strong> adalah proses mengubah data numerik menjadi kategori. Ini
+                        penting karena algoritma klasifikasi membutuhkan kategori yang jelas untuk dipelajari.
+                        <br><br>
+                        <strong>Aturan yang kita buat:</strong><br>
+                        • Units_Sold ≤ 20 → "Low" (penjualan rendah)<br>
+                        • Units_Sold 21-51 → "Medium" (penjualan sedang)<br>
+                        • Units_Sold > 51 → "High" (penjualan tinggi)
+                    </div>
+
+                    <div class="warning-box">
+                        Hati-hati mengetik rumus! Satu huruf salah bisa menyebabkan error. Pastikan tanda kurung dan
+                        tanda kutip sudah benar.
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ "Unknown attribute Units_Sold":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Nama kolom salah. Pastikan persis:
+                            <code>Units_Sold</code> (pakai underscore, S besar).
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ "Expression parse error" / "Syntax error":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Rumus salah. Copy ini:<br>
+                            <code>if(Units_Sold &lt;= 20, "Low", if(Units_Sold &lt;= 51, "Medium", "High"))</code>
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Tanda kutip error:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Pakai kutip lurus " bukan kutip melengkung ". Ketik
+                            manual, jangan copy dari Word.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LANGKAH 5-8 -->
+        <section id="langkah5">
+            <h2>📝 Langkah 5-8: Menyiapkan Model</h2>
+
+            <!-- STEP 5 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Tambahkan Operator "Filter Examples"</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Cari dan drag operator <strong>Filter Examples</strong></li>
+                            <li>Hubungkan dari Generate Attributes</li>
+                            <li>Di Parameters:
+                                <ul>
+                                    <li><strong>condition class</strong>: custom_filters</li>
+                                    <li>Klik <strong>Add Filters</strong></li>
+                                    <li>Pilih: Units_Sold, gt (greater than), 51</li>
+                                    <li>Centang <strong>invert filter</strong> = Yes</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <img src="screenshot/Screenshot (623).png" onclick="openLightbox(this)" alt="Filter Examples">
+                    <p class="caption">Contoh tampilan Filter Examples</p>
+
+                    <div class="why-box">
+                        Dalam project ini, kita hanya fokus ke 2 kategori: Low dan Medium. Data dengan kategori High
+                        dibuang supaya model lebih sederhana dan fokus. Ini seperti menyederhanakan soal ujian.
+                    </div>
+
+                    <div class="concept-box">
+                        <strong>Filtering</strong> adalah proses menyaring data. "gt" artinya "greater than" (lebih
+                        besar dari). Dengan "invert filter", kita membalik logika: yang tersisa adalah data yang TIDAK
+                        lebih besar dari 51.
+                    </div>
+
+                    <div class="tip-box">
+                        Di project nyata, mungkin kamu tidak perlu filter. Tapi kadang data outlier (nilai ekstrem)
+                        perlu dihapus agar model lebih akurat.
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ Semua data hilang setelah filter:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Cek apakah "invert filter" dicentang. Kalau salah,
+                            data yang seharusnya dibuang malah dipertahankan.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Filter tidak berfungsi:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Pastikan condition class = "custom_filters" dan nama
+                            atribut sesuai (Units_Sold).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 6 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Tambahkan Operator "Set Role"</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Cari dan drag operator <strong>Set Role</strong></li>
+                            <li>Hubungkan dari Filter Examples</li>
+                            <li>Di Parameters:
+                                <ul>
+                                    <li><strong>attribute name</strong>: <code>status_penjualan</code></li>
+                                    <li><strong>target role</strong>: <code>label</code></li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <img src="screenshot/Screenshot (624).png" onclick="openLightbox(this)" alt="Set Role">
+                    <p class="caption">Contoh tampilan Set Role</p>
+
+                    <div class="why-box">
+                        Ini langkah <strong>SANGAT PENTING</strong>! Kita memberitahu RapidMiner: "Kolom
+                        status_penjualan adalah TARGET yang mau kita prediksi." Tanpa ini, komputer tidak tahu apa yang
+                        harus dipelajari.
+                    </div>
+
+                    <div class="concept-box">
+                        Dalam machine learning, ada 2 jenis kolom:<br>
+                        • <strong>Label/Target</strong>: Kolom yang mau diprediksi (status_penjualan)<br>
+                        • <strong>Features/Fitur</strong>: Kolom lain yang jadi petunjuk (Price, Discount, dll)<br><br>
+                        Komputer akan belajar pola dari fitur untuk menebak label.
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ "Attribute not found":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Kolom status_penjualan belum ada. Pastikan langkah 4
+                            (Generate Attributes) sudah benar.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Decision Tree error "No label defined":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Set Role belum diatur. Pastikan target role =
+                            "label" sudah diisi.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 7 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Tambahkan Operator "Multiply"</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Cari dan drag operator <strong>Multiply</strong></li>
+                            <li>Hubungkan dari Set Role</li>
+                            <li>Tidak perlu atur parameter apapun</li>
+                        </ol>
+                    </div>
+
+                    <img src="screenshot/Screenshot (625).png" onclick="openLightbox(this)" alt="Multiply">
+                    <p class="caption">Contoh tampilan Multiply</p>
+
+                    <div class="why-box">
+                        Kita mau membandingkan 2 algoritma (C4.5 dan CART). Data perlu di-copy supaya bisa masuk ke 2
+                        proses berbeda secara paralel. Ini seperti fotocopy soal ujian untuk 2 siswa.
+                    </div>
+
+                    <div class="tip-box">
+                        Operator Multiply akan punya beberapa output (out 1, out 2, dst). Nanti kita hubungkan
+                        masing-masing ke proses validasi yang berbeda.
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 8 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">8</div>
+                    <div class="step-title">Tambahkan 2 Operator "Validation" (X-Validation)</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Cari operator <strong>Validation</strong> atau <strong>X-Validation</strong></li>
+                            <li>Drag <strong>2 kali</strong> ke canvas (beri nama "Validation" dan "Validation (2)")
+                            </li>
+                            <li>Hubungkan:
+                                <ul>
+                                    <li>Output 1 Multiply → Input Validation (untuk C4.5)</li>
+                                    <li>Output 2 Multiply → Input Validation (2) (untuk CART)</li>
+                                </ul>
+                            </li>
+                            <li>Untuk kedua Validation, atur Parameters:
+                                <ul>
+                                    <li><strong>number of validations</strong>: 10</li>
+                                    <li><strong>sampling type</strong>: automatic</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <img src="screenshot/Screenshot (626).png" onclick="openLightbox(this)" alt="Validation">
+                    <p class="caption">Contoh tampilan X-Validation</p>
+
+                    <div class="why-box">
+                        <strong>Cross Validation</strong> adalah cara menguji model yang adil. Data dibagi jadi 10
+                        bagian. Komputer belajar dari 9 bagian, diuji dengan 1 bagian. Diulang 10 kali dengan bagian
+                        berbeda yang jadi ujian. Hasil akhir adalah rata-rata dari 10 pengujian.
+                    </div>
+
+                    <div class="concept-box">
+                        <strong>Kenapa perlu validasi?</strong><br>
+                        Kalau kita langsung test pakai data yang sama dengan data latihan, hasilnya bisa "curang" -
+                        komputer cuma hafal, bukan benar-benar paham pola. Cross validation memastikan model benar-benar
+                        bisa menebak data BARU yang belum pernah dilihat.
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ "Input is not connected":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Output Multiply belum dihubungkan ke Validation.
+                            Tarik garis dari output Multiply ke input Validation.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Validation kosong / tidak ada isi:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Double-click Validation untuk masuk ke dalamnya. Di
+                            dalam ada 2 area yang perlu diisi.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LANGKAH 9-12 -->
+        <section id="langkah9">
+            <h2>📝 Langkah 9-12: Membuat Model Decision Tree</h2>
+
+            <!-- STEP 9 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">9</div>
+                    <div class="step-title">Masuk ke Dalam Validation dan Tambahkan Decision Tree C4.5</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li><strong>Double-click</strong> pada kotak Validation pertama untuk masuk ke dalamnya</li>
+                            <li>Kamu akan lihat ada 2 area: Training dan Testing</li>
+                            <li>Di area <strong>Training</strong>:
+                                <ul>
+                                    <li>Cari operator <strong>Decision Tree</strong></li>
+                                    <li>Drag ke dalam area Training</li>
+                                    <li>Hubungkan port "training" ke input Decision Tree</li>
+                                    <li>Hubungkan output Decision Tree ke port "model"</li>
+                                </ul>
+                            </li>
+                            <li>Klik Decision Tree, atur Parameters:
+                                <ul>
+                                    <li><strong>criterion</strong>: gain_ratio (ini yang membuat jadi C4.5)</li>
+                                    <li><strong>maximal depth</strong>: 20</li>
+                                    <li><strong>apply pruning</strong>: true</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="why-box">
+                        <strong>Decision Tree</strong> adalah algoritma yang membuat aturan berbentuk pohon. Seperti
+                        flowchart yang bertanya: "Kalau harganya segini, terus diskonnya segitu, maka penjualannya..."
+                        <br><br>
+                        <strong>Gain Ratio</strong> adalah kriteria yang dipakai C4.5 untuk memilih pertanyaan terbaik
+                        di setiap cabang pohon.
+                    </div>
+
+                    <div class="concept-box">
+                        <strong>Pruning (Pemangkasan)</strong> adalah proses memotong cabang pohon yang tidak terlalu
+                        penting. Ini mencegah model jadi terlalu kompleks dan "hafalan". Model yang terlalu hafalan
+                        disebut <strong>overfitting</strong> - bagus di data latihan tapi jelek di data baru.
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ "No training data":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Port "training" di dalam Validation belum
+                            dihubungkan ke Decision Tree.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Decision Tree tidak muncul di Operators:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Ketik "Decision Tree" di search box. Kalau tetap
+                            tidak ada, coba ketik "Tree".
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Tidak bisa keluar dari dalam Validation:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Klik ikon panah di pojok kiri atas canvas untuk
+                            kembali ke main process.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 10 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">10</div>
+                    <div class="step-title">Di Area Testing: Tambahkan Apply Model dan Performance</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Masih di dalam Validation, pindah ke area <strong>Testing</strong></li>
+                            <li>Drag operator <strong>Apply Model</strong></li>
+                            <li>Drag operator <strong>Performance (Classification)</strong></li>
+                            <li>Hubungkan:
+                                <ul>
+                                    <li>Port "model" → Apply Model (input atas)</li>
+                                    <li>Port "test set" → Apply Model (input bawah)</li>
+                                    <li>Output Apply Model → input Performance</li>
+                                    <li>Output Performance → port "averagable 1"</li>
+                                </ul>
+                            </li>
+                            <li>Klik Performance, pastikan <strong>accuracy</strong> dicentang</li>
+                        </ol>
+                    </div>
+
+                    <div class="why-box">
+                        <strong>Apply Model</strong>: Menerapkan model yang sudah dilatih ke data test. Seperti siswa
+                        mengerjakan soal ujian setelah belajar.<br><br>
+                        <strong>Performance</strong>: Menghitung seberapa akurat prediksinya. Berapa persen yang ditebak
+                        dengan benar.
+                    </div>
+
+                    <div class="tip-box">
+                        Setelah selesai mengatur di dalam Validation, klik tombol panah di pojok kiri atas untuk kembali
+                        ke tampilan utama (main process).
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 11 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">11</div>
+                    <div class="step-title">Ulangi untuk Validation (2) dengan CART</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li><strong>Double-click</strong> pada Validation (2)</li>
+                            <li>Ulangi langkah 9-10 dengan perbedaan:</li>
+                            <li>Saat mengatur Decision Tree, pilih:
+                                <ul>
+                                    <li><strong>criterion</strong>: <code>gini_index</code> (ini yang membuat jadi CART)
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>Parameter lainnya sama saja</li>
+                        </ol>
+                    </div>
+
+                    <div class="why-box">
+                        Sekarang kita punya 2 model dengan metode berbeda:<br>
+                        • <strong>C4.5</strong> menggunakan Gain Ratio<br>
+                        • <strong>CART</strong> menggunakan Gini Index<br><br>
+                        Ini memungkinkan kita membandingkan mana yang lebih baik untuk dataset ini.
+                    </div>
+
+                    <div class="concept-box">
+                        <strong>Gini Index</strong> adalah cara lain untuk memilih pertanyaan terbaik di pohon
+                        keputusan. Konsepnya: Ukur seberapa "campur aduk" data di setiap cabang. Cabang yang lebih
+                        "murni" (isinya satu kategori) lebih bagus.
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 12 -->
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">12</div>
+                    <div class="step-title">Hubungkan Output ke Result</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Kembali ke tampilan utama (main process)</li>
+                            <li>Hubungkan output dari kedua Validation ke port result di kanan:
+                                <ul>
+                                    <li>Validation output "model" → res (result)</li>
+                                    <li>Validation output "averagable" → res</li>
+                                    <li>Validation (2) output "model" → res</li>
+                                    <li>Validation (2) output "averagable" → res</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <img src="screenshot/Screenshot (628).png" onclick="openLightbox(this)" alt="Full Process">
+                    <p class="caption">Tampilan keseluruhan proses yang sudah lengkap</p>
+
+                    <div class="why-box">
+                        Port "result" adalah tempat output yang mau kita lihat di tab Results. Kalau tidak dihubungkan,
+                        kita tidak bisa melihat hasilnya!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HASIL -->
+        <section id="hasil">
+            <h2>🚀 Menjalankan dan Melihat Hasil</h2>
+
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">▶</div>
+                    <div class="step-title">Jalankan Process</div>
+                </div>
+                <div class="step-content">
+                    <div class="do-box">
+                        <ol>
+                            <li>Klik tombol <strong>Play (▶)</strong> di toolbar atas, atau tekan <strong>F11</strong>
+                            </li>
+                            <li>Tunggu proses selesai (mungkin beberapa detik)</li>
+                            <li>RapidMiner akan otomatis pindah ke tab <strong>Results</strong></li>
+                        </ol>
+                    </div>
+
+                    <div class="warning-box">
+                        Kalau ada error, baca pesan errornya dengan teliti!
+                    </div>
+
+                    <div class="error-box">
+                        <div class="error-item">
+                            <strong>❌ "Could not read file...":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Lokasi file CSV salah. Kembali ke Read CSV, pilih
+                            ulang file.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ "Unknown attribute...":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Nama kolom salah di salah satu operator. Cek apakah
+                            penulisan sudah benar.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ "No label defined":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Set Role belum diatur. Kembali ke langkah 6.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ "Input not connected":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Ada operator yang belum terhubung. Cek semua garis
+                            koneksi.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ "Subprocess is empty":</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Di dalam Validation belum diisi. Double-click
+                            Validation dan isi dengan Decision Tree.
+                        </div>
+                        <div class="error-item">
+                            <strong>❌ Process jalan tapi tidak ada hasil:</strong><br>
+                            <span class="fix-text">✅ Solusi:</span> Output belum dihubungkan ke port "res". Kembali ke
+                            langkah 12.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>📊 Memahami Hasil</h3>
+
+            <p>Setelah proses selesai, kamu akan melihat beberapa tab hasil:</p>
+
+            <h4>1. Decision Tree (Pohon Keputusan)</h4>
+            <img src="screenshot/Screenshot (629).png" onclick="openLightbox(this)" alt="Tree Result">
+            <p class="caption">Hasil Decision Tree</p>
+
+            <div class="concept-box">
+                Ini adalah "otak" model yang sudah belajar. Baca dari atas ke bawah:<br>
+                • Akar pohon menunjukkan pertanyaan pertama<br>
+                • Cabang menunjukkan jawaban<br>
+                • Daun (ujung) menunjukkan prediksi final<br><br>
+                <strong>Contoh dalam project ini:</strong><br>
+                "Kalau Units_Sold ≤ 20.5, maka prediksi = Low"<br>
+                "Kalau Units_Sold > 20.5, maka prediksi = Medium"
+            </div>
+
+            <h4>2. Performance / Confusion Matrix</h4>
+            <img src="screenshot/Screenshot (632).png" onclick="openLightbox(this)" alt="Performance">
+            <p class="caption">Confusion Matrix dan Akurasi</p>
+
+            <div class="concept-box">
+                <strong>Accuracy (Akurasi)</strong>: Persentase prediksi yang benar. 100% berarti semua tebakan
+                benar!<br><br>
+                <strong>Confusion Matrix</strong>: Tabel yang menunjukkan:
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>Ditebak Medium</th>
+                        <th>Ditebak Low</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Sebenarnya Medium</strong></td>
+                        <td>889 ✓ (benar)</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sebenarnya Low</strong></td>
+                        <td>0</td>
+                        <td>109 ✓ (benar)</td>
+                    </tr>
+                </table>
+                Angka diagonal (889 dan 109) adalah yang ditebak dengan benar!
+            </div>
+
+            <div class="tip-box">
+                <strong>Kenapa akurasinya 100%?</strong><br>
+                Karena kolom status_penjualan dibuat langsung dari Units_Sold dengan aturan yang jelas. Jadi Decision
+                Tree dengan mudah menemukan pola tersebut. Di dataset nyata, akurasi biasanya lebih rendah karena
+                polanya lebih kompleks.
+            </div>
+        </section>
+
+        <!-- SIMPAN PROJECT -->
+        <section>
+            <h2>💾 Menyimpan Project</h2>
+
+            <div class="do-box">
+                <ol>
+                    <li>Klik <strong>File → Save Process</strong></li>
+                    <li>Pilih lokasi penyimpanan</li>
+                    <li>File akan tersimpan dengan ekstensi <strong>.rmp</strong></li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                File .rmp bisa dibuka lagi kapan saja di RapidMiner. Semua pengaturan dan koneksi akan tersimpan!
+            </div>
+        </section>
+
+        <!-- RINGKASAN KONSEP -->
+        <section>
+            <h2>📚 Ringkasan Konsep yang Sudah Kamu Pelajari</h2>
+
+            <table>
+                <tr>
+                    <th>Konsep</th>
+                    <th>Penjelasan</th>
+                </tr>
+                <tr>
+                    <td><strong>Data Mining</strong></td>
+                    <td>Mencari pola tersembunyi dari data besar</td>
+                </tr>
+                <tr>
+                    <td><strong>Klasifikasi</strong></td>
+                    <td>Mengelompokkan data ke kategori (Low, Medium, High)</td>
+                </tr>
+                <tr>
+                    <td><strong>Label</strong></td>
+                    <td>Kolom yang mau diprediksi (target)</td>
+                </tr>
+                <tr>
+                    <td><strong>Feature</strong></td>
+                    <td>Kolom yang jadi petunjuk untuk prediksi</td>
+                </tr>
+                <tr>
+                    <td><strong>Decision Tree</strong></td>
+                    <td>Model berbentuk pohon keputusan</td>
+                </tr>
+                <tr>
+                    <td><strong>C4.5 (Gain Ratio)</strong></td>
+                    <td>Metode memilih cabang berdasarkan information gain</td>
+                </tr>
+                <tr>
+                    <td><strong>CART (Gini Index)</strong></td>
+                    <td>Metode memilih cabang berdasarkan kemurnian data</td>
+                </tr>
+                <tr>
+                    <td><strong>Cross Validation</strong></td>
+                    <td>Teknik menguji model dengan membagi data berkali-kali</td>
+                </tr>
+                <tr>
+                    <td><strong>Accuracy</strong></td>
+                    <td>Persentase prediksi yang benar</td>
+                </tr>
+                <tr>
+                    <td><strong>Confusion Matrix</strong></td>
+                    <td>Tabel perbandingan prediksi vs kenyataan</td>
+                </tr>
+                <tr>
+                    <td><strong>Overfitting</strong></td>
+                    <td>Model terlalu hafalan, tidak bisa generalisasi</td>
+                </tr>
+                <tr>
+                    <td><strong>Pruning</strong></td>
+                    <td>Pemangkasan pohon untuk mencegah overfitting</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- CHECKLIST FINAL -->
+        <section>
+            <h2>✅ Checklist Akhir</h2>
+
+            <div class="checklist">
+                <h4>Pastikan kamu sudah:</h4>
+                <label><input type="checkbox"> Membuat project baru</label>
+                <label><input type="checkbox"> Menambahkan Read CSV dan memilih file data</label>
+                <label><input type="checkbox"> Menambahkan Select Attributes</label>
+                <label><input type="checkbox"> Membuat kolom status_penjualan dengan Generate Attributes</label>
+                <label><input type="checkbox"> Memfilter data dengan Filter Examples</label>
+                <label><input type="checkbox"> Mengatur label dengan Set Role</label>
+                <label><input type="checkbox"> Menggandakan data dengan Multiply</label>
+                <label><input type="checkbox"> Membuat 2 Validation (C4.5 dan CART)</label>
+                <label><input type="checkbox"> Mengisi Decision Tree di dalam masing-masing Validation</label>
+                <label><input type="checkbox"> Menambahkan Apply Model dan Performance</label>
+                <label><input type="checkbox"> Menghubungkan semua output ke result</label>
+                <label><input type="checkbox"> Menjalankan process dan melihat hasil</label>
+                <label><input type="checkbox"> Menyimpan project</label>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>🎯 Tutorial Praktik RapidMiner</p>
+        <p>Selamat! Kamu sudah belajar dasar-dasar Data Mining!</p>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="close-btn">&times;</span>
+        <img id="lightbox-img" src="">
+    </div>
+
+    <script>
+        function openLightbox(img) {
+            document.getElementById('lightbox').classList.add('active');
+            document.getElementById('lightbox-img').src = img.src;
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Update progress bar based on scroll
+        window.addEventListener('scroll', function () {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.querySelector('.progress-bar').style.width = progress + '%';
+            document.querySelector('.progress-bar').textContent = Math.round(progress) + '% Selesai';
+        });
+    </script>
+
+</body>
+
+</html>

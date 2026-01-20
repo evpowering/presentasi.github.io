@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persiapan Tanya Jawab - RapidMiner Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #fafafa;
+            color: #333;
+            line-height: 1.8;
+            font-size: 18px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            background: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        nav a {
+            color: #e91e63;
+            text-decoration: none;
+            margin: 5px 15px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .page-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 200;
+            display: flex;
+            gap: 10px;
+        }
+
+        .page-switcher a {
+            background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .page-switcher a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .page-switcher a.active {
+            background: #333;
+            cursor: default;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #e91e63;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e91e63;
+        }
+
+        h3 {
+            color: #9c27b0;
+            font-size: 1.2rem;
+            margin: 25px 0 15px;
+        }
+
+        /* Q&A Boxes */
+        .qa-item {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .question {
+            background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .question:hover {
+            opacity: 0.95;
+        }
+
+        .q-icon {
+            background: white;
+            color: #e91e63;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .q-text {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .answer {
+            padding: 25px;
+            background: #fce4ec;
+            display: none;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        .answer-label {
+            color: #e91e63;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .answer p {
+            margin-bottom: 15px;
+        }
+
+        .answer ul,
+        .answer ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        .answer li {
+            margin-bottom: 8px;
+        }
+
+        /* Tip boxes */
+        .speaking-tip {
+            background: #e8f5e9;
+            border-left: 5px solid #4CAF50;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .speaking-tip::before {
+            content: "💬 Tips Menjawab: ";
+            font-weight: 700;
+            color: #2e7d32;
+        }
+
+        .key-point {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .key-point::before {
+            content: "🔑 Poin Penting: ";
+            font-weight: 700;
+            color: #e65100;
+        }
+
+        .example {
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .example::before {
+            content: "📝 Contoh Jawaban: ";
+            font-weight: 700;
+            color: #1565c0;
+        }
+
+        /* Category badges */
+        .category {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .cat-basic {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .cat-technical {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .cat-deep {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .cat-comparison {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        /* Concept cards */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .concept-card h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .concept-card p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #e91e63;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #fce4ec;
+        }
+
+        /* Code */
+        code {
+            background: #f5f5f5;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #e91e63;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-switcher">
+        <a href="index.html">📚 Panduan</a>
+        <a href="tutorial-praktik.html">🎯 Tutorial</a>
+        <a href="tanya-jawab.html" class="active">❓ Tanya Jawab</a>
+    </div>
+
+    <header>
+        <h1>❓ Persiapan Tanya Jawab</h1>
+        <p>Pertanyaan yang Mungkin Ditanyakan Dosen & Cara Menjawabnya</p>
+    </header>
+
+    <nav>
+        <a href="#dasar">Pertanyaan Dasar</a>
+        <a href="#teknis">Pertanyaan Teknis</a>
+        <a href="#mendalam">Pertanyaan Mendalam</a>
+        <a href="#konsep">Konsep Pendukung</a>
+    </nav>
+
+    <main>
+
+        <!-- INTRO -->
+        <section>
+            <h2>📋 Cara Menggunakan Halaman Ini</h2>
+            <p>Klik pada setiap pertanyaan untuk melihat jawabannya. Pelajari jawaban-jawaban ini sebelum presentasi!
+            </p>
+
+            <div class="concept-grid">
+                <div class="concept-card" style="background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);">
+                    <h4>🟢 Pertanyaan Dasar</h4>
+                    <p>Pertanyaan umum tentang apa, mengapa, dan bagaimana project ini</p>
+                </div>
+                <div class="concept-card" style="background: linear-gradient(135deg, #2196F3 0%, #03A9F4 100%);">
+                    <h4>🔵 Pertanyaan Teknis</h4>
+                    <p>Pertanyaan tentang operator, parameter, dan cara kerja RapidMiner</p>
+                </div>
+                <div class="concept-card" style="background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);">
+                    <h4>🟣 Pertanyaan Mendalam</h4>
+                    <p>Pertanyaan konseptual tentang data mining dan machine learning</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PERTANYAAN DASAR -->
+        <section id="dasar">
+            <h2>🟢 Pertanyaan Dasar</h2>
+
+            <!-- Q1 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">1</div>
+                    <div class="q-text">Apa tujuan dari project ini?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>Project ini bertujuan untuk <strong>memprediksi kategori penjualan</strong> (Low atau Medium)
+                        dari data e-commerce menggunakan algoritma Decision Tree, yaitu C4.5 dan CART.</p>
+                    <p>Secara spesifik, kami ingin:</p>
+                    <ol>
+                        <li>Menganalisis data penjualan e-commerce yang berisi 1000 transaksi</li>
+                        <li>Membuat model klasifikasi yang bisa memprediksi apakah penjualan akan rendah atau sedang
+                        </li>
+                        <li>Membandingkan performa dua algoritma Decision Tree: C4.5 dan CART</li>
+                    </ol>
+                    <div class="speaking-tip">
+                        Jelaskan dengan percaya diri. Mulai dengan tujuan umum, lalu berikan detail spesifik.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">2</div>
+                    <div class="q-text">Data apa yang kamu gunakan?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>Kami menggunakan dataset <strong>Ecommerce Sales Prediction</strong> yang berisi 1000+ transaksi
+                        penjualan online.</p>
+                    <table>
+                        <tr>
+                            <th>Kolom</th>
+                            <th>Isi</th>
+                            <th>Jenis Data</th>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>Tanggal transaksi</td>
+                            <td>Tanggal</td>
+                        </tr>
+                        <tr>
+                            <td>Product_Category</td>
+                            <td>Kategori produk (Sports, Toys, Fashion, dll)</td>
+                            <td>Kategorikal</td>
+                        </tr>
+                        <tr>
+                            <td>Price</td>
+                            <td>Harga produk</td>
+                            <td>Numerik</td>
+                        </tr>
+                        <tr>
+                            <td>Discount</td>
+                            <td>Persentase diskon</td>
+                            <td>Numerik</td>
+                        </tr>
+                        <tr>
+                            <td>Customer_Segment</td>
+                            <td>Tipe pelanggan (Premium, Regular, Occasional)</td>
+                            <td>Kategorikal</td>
+                        </tr>
+                        <tr>
+                            <td>Marketing_Spend</td>
+                            <td>Biaya marketing</td>
+                            <td>Numerik</td>
+                        </tr>
+                        <tr>
+                            <td>Units_Sold</td>
+                            <td>Jumlah unit terjual</td>
+                            <td>Numerik (Target)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">3</div>
+                    <div class="q-text">Apa itu RapidMiner?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>RapidMiner adalah <strong>platform data science</strong> yang menyediakan lingkungan visual untuk
+                        melakukan:</p>
+                    <ul>
+                        <li><strong>Data Mining</strong> - Mencari pola dalam data</li>
+                        <li><strong>Machine Learning</strong> - Membuat model prediktif</li>
+                        <li><strong>Analisis Data</strong> - Mengolah dan memvisualisasi data</li>
+                    </ul>
+                    <p>Keunggulan RapidMiner adalah penggunaan sistem <strong>drag-and-drop</strong>, sehingga pengguna
+                        tidak perlu menulis kode program.</p>
+                    <div class="example">
+                        "RapidMiner itu seperti Canva-nya data science, Pak/Bu. Kita tinggal seret-lepas komponen, tidak
+                        perlu coding."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">4</div>
+                    <div class="q-text">Bagaimana hasil dari project ini?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>Hasil dari project ini adalah:</p>
+                    <ul>
+                        <li><strong>Akurasi C4.5:</strong> 100%</li>
+                        <li><strong>Akurasi CART:</strong> 100%</li>
+                    </ul>
+                    <p>Kedua algoritma berhasil menemukan aturan yang sama:</p>
+                    <div class="key-point">
+                        Jika Units_Sold ≤ 20.5 → Penjualan <strong>Low</strong><br>
+                        Jika Units_Sold > 20.5 → Penjualan <strong>Medium</strong>
+                    </div>
+                    <p>Akurasi 100% tercapai karena label (status_penjualan) dibuat langsung dari kolom Units_Sold,
+                        sehingga polanya sangat jelas bagi algoritma.</p>
+                </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">5</div>
+                    <div class="q-text">Kenapa memilih algoritma Decision Tree?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>Decision Tree dipilih karena beberapa alasan:</p>
+                    <ol>
+                        <li><strong>Mudah dipahami</strong> - Hasilnya berupa aturan yang bisa dibaca manusia</li>
+                        <li><strong>Tidak perlu normalisasi data</strong> - Bisa langsung memproses data mentah</li>
+                        <li><strong>Bisa menangani data kategorikal dan numerik</strong></li>
+                        <li><strong>Visualisasi jelas</strong> - Bisa dilihat dalam bentuk pohon</li>
+                        <li><strong>Cocok untuk klasifikasi</strong> - Sangat baik untuk mengelompokkan data</li>
+                    </ol>
+                    <div class="speaking-tip">
+                        Kalau ditanya lebih lanjut, bandingkan dengan algoritma lain: "Decision Tree lebih mudah
+                        diinterpretasi dibanding Neural Network atau SVM."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PERTANYAAN TEKNIS -->
+        <section id="teknis">
+            <h2>🔵 Pertanyaan Teknis</h2>
+
+            <!-- Q6 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">6</div>
+                    <div class="q-text">Apa bedanya C4.5 dan CART?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <table>
+                        <tr>
+                            <th>Aspek</th>
+                            <th>C4.5</th>
+                            <th>CART</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Kriteria Split</strong></td>
+                            <td>Gain Ratio</td>
+                            <td>Gini Index</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tipe Pohon</strong></td>
+                            <td>Bisa multi-way (banyak cabang)</td>
+                            <td>Binary (selalu 2 cabang)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Missing Values</strong></td>
+                            <td>Bisa menangani langsung</td>
+                            <td>Perlu handling khusus</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Output</strong></td>
+                            <td>Aturan/rules</td>
+                            <td>Pohon biner</td>
+                        </tr>
+                    </table>
+                    <div class="key-point">
+                        <strong>Gain Ratio (C4.5)</strong> = Mengukur seberapa banyak informasi yang didapat dari suatu
+                        atribut, dinormalisasi dengan split information.<br><br>
+                        <strong>Gini Index (CART)</strong> = Mengukur tingkat ketidakmurnian. Nilai 0 berarti semua data
+                        di node itu sama kelasnya (murni).
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">7</div>
+                    <div class="q-text">Apa itu Cross Validation? Kenapa pakai 10-fold?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p><strong>Cross Validation</strong> adalah teknik untuk menguji model dengan cara:</p>
+                    <ol>
+                        <li>Data dibagi menjadi K bagian (dalam kasus ini K=10)</li>
+                        <li>Secara bergantian, 1 bagian jadi data test, sisanya jadi data training</li>
+                        <li>Proses diulang K kali</li>
+                        <li>Hasil akhir adalah rata-rata dari semua pengujian</li>
+                    </ol>
+                    <p><strong>Kenapa 10-fold?</strong></p>
+                    <ul>
+                        <li>10 adalah standar industri yang sudah terbukti efektif</li>
+                        <li>Cukup banyak untuk validasi yang akurat</li>
+                        <li>Tidak terlalu banyak sehingga proses masih cepat</li>
+                    </ul>
+                    <div class="example">
+                        "Cross validation itu seperti ujian 10 kali dengan soal berbeda, Pak/Bu. Nilai akhirnya
+                        dirata-rata supaya hasilnya lebih adil dan tidak kebetulan."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">8</div>
+                    <div class="q-text">Kenapa data dengan Units_Sold > 51 difilter/dibuang?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>Ada beberapa kemungkinan alasan:</p>
+                    <ol>
+                        <li><strong>Menyederhanakan problem</strong> - Fokus ke 2 kelas (Low dan Medium) lebih mudah
+                            untuk pembelajaran</li>
+                        <li><strong>Data tidak seimbang</strong> - Mungkin data "High" terlalu sedikit sehingga model
+                            sulit mempelajarinya</li>
+                        <li><strong>Scope project</strong> - Project ini fokus membedakan penjualan rendah dan sedang
+                        </li>
+                    </ol>
+                    <div class="speaking-tip">
+                        Kalau tidak yakin alasannya, jawab dengan jujur: "Dalam project ini, kami fokus pada klasifikasi
+                        2 kelas untuk menyederhanakan analisis. Di project yang lebih kompleks, kategori High bisa
+                        dimasukkan."
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">9</div>
+                    <div class="q-text">Apa fungsi operator Set Role?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p><strong>Set Role</strong> digunakan untuk menentukan peran setiap kolom dalam proses machine
+                        learning:</p>
+                    <ul>
+                        <li><strong>Label</strong> = Kolom yang mau diprediksi (target variabel)</li>
+                        <li><strong>ID</strong> = Kolom identifikasi unik</li>
+                        <li><strong>Weight</strong> = Bobot data</li>
+                        <li><strong>Regular/Attribute</strong> = Kolom fitur untuk prediksi (default)</li>
+                    </ul>
+                    <p>Dalam project ini, <code>status_penjualan</code> di-set sebagai <strong>label</strong> karena
+                        itulah yang mau kita prediksi.</p>
+                    <div class="key-point">
+                        Tanpa Set Role, RapidMiner tidak tahu kolom mana yang harus diprediksi!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">10</div>
+                    <div class="q-text">Apa itu Confusion Matrix?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p><strong>Confusion Matrix</strong> adalah tabel yang menunjukkan perbandingan antara prediksi
+                        model dengan nilai sebenarnya:</p>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th>Diprediksi: Medium</th>
+                            <th>Diprediksi: Low</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Aktual: Medium</strong></td>
+                            <td style="background:#c8e6c9;">True Positive (TP)</td>
+                            <td style="background:#ffcdd2;">False Negative (FN)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Aktual: Low</strong></td>
+                            <td style="background:#ffcdd2;">False Positive (FP)</td>
+                            <td style="background:#c8e6c9;">True Negative (TN)</td>
+                        </tr>
+                    </table>
+                    <p><strong>Cara baca:</strong></p>
+                    <ul>
+                        <li>Diagonal (hijau) = Prediksi BENAR</li>
+                        <li>Non-diagonal (merah) = Prediksi SALAH</li>
+                    </ul>
+                    <p>Dalam project ini: 889 Medium ditebak benar, 109 Low ditebak benar, 0 salah = 100% akurat!</p>
+                </div>
+            </div>
+
+            <!-- Q11 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">11</div>
+                    <div class="q-text">Apa itu Pruning? Kenapa diaktifkan?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p><strong>Pruning (Pemangkasan)</strong> adalah proses memotong cabang pohon yang tidak signifikan.
+                    </p>
+                    <p><strong>Tujuan Pruning:</strong></p>
+                    <ul>
+                        <li>Mencegah <strong>overfitting</strong> (model terlalu hafalan)</li>
+                        <li>Membuat pohon lebih sederhana dan mudah dipahami</li>
+                        <li>Meningkatkan generalisasi ke data baru</li>
+                    </ul>
+                    <div class="example">
+                        "Pruning itu seperti pangkas rumput, Pak/Bu. Kalau pohon keputusan terlalu rimbun (kompleks),
+                        kita potong cabang yang tidak penting supaya lebih rapi dan efektif."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PERTANYAAN MENDALAM -->
+        <section id="mendalam">
+            <h2>🟣 Pertanyaan Mendalam</h2>
+
+            <!-- Q12 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">12</div>
+                    <div class="q-text">Kenapa akurasinya bisa 100%? Apakah itu bagus?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>Akurasi 100% tercapai karena:</p>
+                    <ul>
+                        <li>Kolom <code>status_penjualan</code> dibuat langsung dari <code>Units_Sold</code> dengan
+                            aturan yang jelas</li>
+                        <li>Polanya sangat sederhana: ≤20 = Low, >20 = Medium</li>
+                        <li>Decision Tree dengan mudah menemukan pola ini</li>
+                    </ul>
+                    <div class="key-point">
+                        <strong>Apakah ini bagus?</strong><br>
+                        Untuk tujuan pembelajaran: YA, ini menunjukkan algoritma bekerja dengan benar.<br><br>
+                        <strong>Di dunia nyata:</strong> Akurasi 100% bisa jadi tanda <strong>data leakage</strong> atau
+                        <strong>overfitting</strong>. Biasanya akurasi realistis adalah 70-95%.
+                    </div>
+                    <div class="speaking-tip">
+                        Jawab dengan jujur bahwa ini karena pola yang sederhana. Dosen akan menghargai kejujuran dan
+                        pemahaman mendalam.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Q13 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">13</div>
+                    <div class="q-text">Apa itu Overfitting dan bagaimana mencegahnya?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p><strong>Overfitting</strong> adalah kondisi di mana model terlalu "hafal" data training sehingga:
+                    </p>
+                    <ul>
+                        <li>Performa di data training: SANGAT BAGUS</li>
+                        <li>Performa di data baru: JELEK</li>
+                    </ul>
+                    <p><strong>Analogi:</strong> Seperti siswa yang hanya hafal soal latihan persis, tapi tidak paham
+                        konsepnya. Saat soal ujian berbeda sedikit, dia tidak bisa menjawab.</p>
+                    <p><strong>Cara mencegah:</strong></p>
+                    <ol>
+                        <li><strong>Pruning</strong> - Memangkas pohon yang terlalu kompleks</li>
+                        <li><strong>Cross Validation</strong> - Menguji dengan data yang berbeda-beda</li>
+                        <li><strong>Batasi kedalaman pohon</strong> - Parameter maximal_depth</li>
+                        <li><strong>Minimal leaf size</strong> - Minimal data di setiap daun</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Q14 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">14</div>
+                    <div class="q-text">Apa kelebihan dan kekurangan Decision Tree?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <table>
+                        <tr>
+                            <th>Kelebihan ✅</th>
+                            <th>Kekurangan ❌</th>
+                        </tr>
+                        <tr>
+                            <td>Mudah dipahami dan divisualisasi</td>
+                            <td>Cenderung overfitting jika tidak di-prune</td>
+                        </tr>
+                        <tr>
+                            <td>Tidak perlu normalisasi data</td>
+                            <td>Sensitif terhadap perubahan kecil di data</td>
+                        </tr>
+                        <tr>
+                            <td>Bisa menangani data numerik & kategorikal</td>
+                            <td>Tidak stabil (data berbeda = pohon berbeda)</td>
+                        </tr>
+                        <tr>
+                            <td>Proses cepat</td>
+                            <td>Bisa bias ke fitur dengan banyak level</td>
+                        </tr>
+                        <tr>
+                            <td>Menghasilkan aturan yang bisa dibaca</td>
+                            <td>Kurang baik untuk relasi yang kompleks</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Q15 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">15</div>
+                    <div class="q-text">Bagaimana jika ingin meningkatkan akurasi?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>Beberapa cara untuk meningkatkan akurasi model:</p>
+                    <ol>
+                        <li><strong>Feature Engineering</strong> - Membuat fitur baru yang lebih informatif</li>
+                        <li><strong>Ensemble Methods</strong> - Gabungkan beberapa model:
+                            <ul>
+                                <li>Random Forest (banyak Decision Tree)</li>
+                                <li>Gradient Boosting</li>
+                                <li>AdaBoost</li>
+                            </ul>
+                        </li>
+                        <li><strong>Hyperparameter Tuning</strong> - Mencari parameter optimal</li>
+                        <li><strong>Lebih banyak data</strong> - Data training yang lebih banyak dan beragam</li>
+                        <li><strong>Algoritma lain</strong> - SVM, Neural Network, dll.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Q16 -->
+            <div class="qa-item">
+                <div class="question" onclick="toggleAnswer(this)">
+                    <div class="q-icon">16</div>
+                    <div class="q-text">Apa aplikasi nyata dari project seperti ini?</div>
+                </div>
+                <div class="answer">
+                    <div class="answer-label">✅ Jawaban:</div>
+                    <p>Project klasifikasi seperti ini bisa diaplikasikan untuk:</p>
+                    <ul>
+                        <li><strong>E-commerce:</strong> Prediksi penjualan produk, rekomendasi stok</li>
+                        <li><strong>Perbankan:</strong> Klasifikasi risiko kredit (layak/tidak layak)</li>
+                        <li><strong>Kesehatan:</strong> Diagnosis penyakit berdasarkan gejala</li>
+                        <li><strong>Marketing:</strong> Segmentasi pelanggan, prediksi churn</li>
+                        <li><strong>Pendidikan:</strong> Prediksi kelulusan siswa</li>
+                        <li><strong>HR:</strong> Prediksi resign karyawan</li>
+                    </ul>
+                    <div class="example">
+                        "Contoh nyata Pak/Bu: Tokopedia atau Shopee bisa pakai teknik ini untuk memprediksi produk mana
+                        yang akan laris di bulan depan, sehingga bisa menyiapkan stok yang cukup."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- KONSEP PENDUKUNG -->
+        <section id="konsep">
+            <h2>📚 Konsep Pendukung yang Perlu Dipahami</h2>
+
+            <h3>1. Jenis-jenis Machine Learning</h3>
+            <table>
+                <tr>
+                    <th>Jenis</th>
+                    <th>Penjelasan</th>
+                    <th>Contoh</th>
+                </tr>
+                <tr>
+                    <td><strong>Supervised Learning</strong></td>
+                    <td>Belajar dari data yang sudah ada labelnya</td>
+                    <td>Klasifikasi, Regresi</td>
+                </tr>
+                <tr>
+                    <td><strong>Unsupervised Learning</strong></td>
+                    <td>Mencari pola tanpa label</td>
+                    <td>Clustering, Dimensionality Reduction</td>
+                </tr>
+                <tr>
+                    <td><strong>Reinforcement Learning</strong></td>
+                    <td>Belajar dari reward/punishment</td>
+                    <td>Game AI, Robot</td>
+                </tr>
+            </table>
+            <div class="key-point">
+                Project ini adalah <strong>Supervised Learning</strong> karena kita punya label (status_penjualan) yang
+                sudah ditentukan.
+            </div>
+
+            <h3>2. Klasifikasi vs Regresi</h3>
+            <table>
+                <tr>
+                    <th>Klasifikasi</th>
+                    <th>Regresi</th>
+                </tr>
+                <tr>
+                    <td>Memprediksi <strong>kategori/kelas</strong></td>
+                    <td>Memprediksi <strong>nilai numerik</strong></td>
+                </tr>
+                <tr>
+                    <td>Contoh: Low/Medium/High</td>
+                    <td>Contoh: Harga rumah = Rp 500 juta</td>
+                </tr>
+                <tr>
+                    <td>Output: Diskrit/terbatas</td>
+                    <td>Output: Kontinu/tidak terbatas</td>
+                </tr>
+            </table>
+
+            <h3>3. Metrik Evaluasi untuk Klasifikasi</h3>
+            <table>
+                <tr>
+                    <th>Metrik</th>
+                    <th>Rumus</th>
+                    <th>Penjelasan</th>
+                </tr>
+                <tr>
+                    <td><strong>Accuracy</strong></td>
+                    <td>(TP+TN) / Total</td>
+                    <td>Persentase prediksi yang benar secara keseluruhan</td>
+                </tr>
+                <tr>
+                    <td><strong>Precision</strong></td>
+                    <td>TP / (TP+FP)</td>
+                    <td>Dari yang diprediksi positif, berapa yang benar-benar positif</td>
+                </tr>
+                <tr>
+                    <td><strong>Recall</strong></td>
+                    <td>TP / (TP+FN)</td>
+                    <td>Dari yang sebenarnya positif, berapa yang berhasil diprediksi</td>
+                </tr>
+                <tr>
+                    <td><strong>F1-Score</strong></td>
+                    <td>2 × (P×R)/(P+R)</td>
+                    <td>Rata-rata harmonis precision dan recall</td>
+                </tr>
+            </table>
+
+            <h3>4. Tahapan Data Mining (CRISP-DM)</h3>
+            <ol>
+                <li><strong>Business Understanding</strong> - Pahami masalah bisnis</li>
+                <li><strong>Data Understanding</strong> - Pahami data yang ada</li>
+                <li><strong>Data Preparation</strong> - Siapkan dan bersihkan data</li>
+                <li><strong>Modeling</strong> - Buat dan latih model</li>
+                <li><strong>Evaluation</strong> - Evaluasi performa model</li>
+                <li><strong>Deployment</strong> - Terapkan model ke dunia nyata</li>
+            </ol>
+        </section>
+
+        <!-- TIPS PRESENTASI -->
+        <section>
+            <h2>💡 Tips Menghadapi Pertanyaan Dosen</h2>
+
+            <div class="speaking-tip">
+                <strong>Dengarkan dengan seksama</strong> sebelum menjawab. Jangan terburu-buru.
+            </div>
+
+            <div class="speaking-tip">
+                <strong>Kalau tidak tahu</strong>, jawab jujur: "Untuk pertanyaan itu, saya perlu mempelajari lebih
+                lanjut, Pak/Bu. Tapi yang saya pahami sejauh ini adalah..."
+            </div>
+
+            <div class="speaking-tip">
+                <strong>Gunakan analogi</strong> untuk menjelaskan konsep yang sulit. Dosen akan menghargai kemampuan
+                menyederhanakan.
+            </div>
+
+            <div class="speaking-tip">
+                <strong>Tunjukkan dengan demo</strong> jika memungkinkan. "Boleh saya tunjukkan langsung di RapidMiner,
+                Pak/Bu?"
+            </div>
+
+            <div class="speaking-tip">
+                <strong>Akui keterbatasan project</strong>. "Project ini masih bisa dikembangkan dengan menambahkan
+                fitur X atau algoritma Y."
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>❓ Persiapan Tanya Jawab RapidMiner</p>
+        <p>Semoga Sukses Presentasinya! 🎓</p>
+    </footer>
+
+    <script>
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            answer.classList.toggle('show');
+        }
+
+        // Auto-open first question of each section
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.qa-item:first-child .answer').forEach(a => a.classList.add('show'));
+        });
+    </script>
+
+</body>
+
+</html>
